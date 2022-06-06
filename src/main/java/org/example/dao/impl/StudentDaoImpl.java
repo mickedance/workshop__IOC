@@ -20,15 +20,15 @@ public class StudentDaoImpl implements StudentDao {
     @Override
     public Student find(int id) {
         Optional<Student> student = students.stream().filter(s -> s.getId() == id).findFirst();
-        if (!student.isPresent()) return null;
-        return student.get();
+        return student.isPresent() ? student.get(): null;
     }
 
     @Override
     public Student save(Student student) {
         if (student == null) throw new IllegalArgumentException("student was null");
-        if (students.add(student)) return student;
-        return null;
+        students.add(student);
+        return student;
+
     }
 
     @Override
@@ -41,6 +41,5 @@ public class StudentDaoImpl implements StudentDao {
         Student s = find(id);
         if(s==null) return;
         students.remove(s);
-
     }
 }
