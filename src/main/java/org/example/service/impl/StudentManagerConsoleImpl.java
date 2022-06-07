@@ -1,6 +1,7 @@
 package org.example.service.impl;
 
 import org.example.dao.StudentDao;
+import org.example.exception.ObjectNotFoundException;
 import org.example.model.Student;
 import org.example.service.StudentManager;
 import org.example.util.UserInput;
@@ -9,6 +10,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class StudentManagerConsoleImpl implements StudentManager {
@@ -38,18 +40,12 @@ public class StudentManagerConsoleImpl implements StudentManager {
     }
 
     @Override
-    public Student find() {
-        System.out.println("### Find student  by id ###");
-        int id = userInput.getInt();
-        return  studentDao.find(id);
+    public Optional<Student> find(int id) {
+        return studentDao.find(id);
     }
 
     @Override
-    public void remove() {
-        System.out.println("### Choose id to remove ###");
-        System.out.println(findAll());
-        System.out.println("Type id:");
-        int id = userInput.getInt();
+    public void remove(int id) throws ObjectNotFoundException {
         studentDao.delete(id);
     }
 
@@ -60,11 +56,13 @@ public class StudentManagerConsoleImpl implements StudentManager {
 
     @Override
     public Student edit(Student student) {
-        System.out.println("### Edit student ###");
-        System.out.println("Change name from: "+ student.getName());
-        System.out.println("Type new name: ");
-        String newName =userInput.getString();
+        String newName = "a new name";
         student.setName(newName);
         return student;
+    }
+
+    @Override
+    public void clear() {
+        studentDao.clear();
     }
 }
